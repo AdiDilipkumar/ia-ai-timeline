@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA — AI Opportunity Timeline</title>
+<style>
+:root{--lg:#134848;--ot:#009D80;--gg:#74908D;--b02:#424242;--border:#E0DED6;--page:#F4F3EE;--card:#FFFFFF;--pr:#D83949;--wy:#FCAA28;--now:#378ADD;--near:#1D9E75;--ambitious:#BA7517;--trans:#7F77DD}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:var(--page);color:var(--b02);font-size:13px;min-height:100vh}
+input,textarea,select{font-family:inherit;font-size:12px;border:1px solid var(--border);border-radius:6px;padding:5px 8px;outline:none;transition:border .15s;background:#fff}
+input:focus,textarea:focus,select:focus{border-color:var(--ot)}
+textarea{resize:vertical;line-height:1.5}
+
+.name-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--page)}
+.name-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:32px 36px;max-width:380px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.08);text-align:center}
+.name-card .logo{font-size:11px;font-weight:700;color:var(--lg);margin-bottom:20px;letter-spacing:.08em;text-transform:uppercase}
+.name-card h2{font-size:18px;font-weight:600;color:#1a1a1a;margin-bottom:6px}
+.name-card p{font-size:12px;color:#888;margin-bottom:20px;line-height:1.55}
+.name-card input{width:100%;font-size:14px;padding:9px 12px;text-align:center;border-radius:8px}
+.btn-primary{width:100%;margin-top:10px;font-size:13px;padding:10px;background:var(--lg);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:600;transition:background .1s}
+.btn-primary:hover{background:#0e3636}
+
+.topbar{background:var(--lg);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.topbar-title{color:#fff;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.topbar-sub{color:var(--gg);font-size:11px;margin-top:2px}
+.topbar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stat-pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:4px 12px;text-align:center;min-width:54px}
+.stat-pill .n{font-size:16px;font-weight:700;color:#fff;line-height:1}
+.stat-pill .l{font-size:10px;color:var(--gg)}
+.sync-badge{font-size:10px;padding:3px 10px;border-radius:10px;font-weight:600;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;gap:5px;white-space:nowrap}
+.sync-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:#94a3b8}
+.sync-dot.live{background:#4ade80}
+.sync-dot.local{background:var(--wy)}
+.sync-dot.syncing{background:var(--wy);animation:blink 1s infinite}
+.sync-dot.error{background:var(--pr)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.btn-add{font-size:11px;padding:5px 13px;border-radius:20px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);cursor:pointer;font-family:inherit;transition:background .1s}
+.btn-add:hover{background:rgba(255,255,255,.2)}
+
+.filter-bar{background:#fff;border-bottom:1px solid var(--border);padding:9px 22px;display:flex;flex-direction:column;gap:7px;position:sticky;top:0;z-index:20;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.filter-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.filter-label{font-size:10px;font-weight:700;color:var(--gg);text-transform:uppercase;letter-spacing:.06em;margin-right:4px;white-space:nowrap;flex-shrink:0}
+.pill{font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid var(--border);background:transparent;color:#777;cursor:pointer;transition:all .12s;user-select:none;white-space:nowrap;font-family:inherit}
+.pill:hover{border-color:var(--ot);color:var(--ot)}
+.pill.on{background:var(--lg);color:#fff;border-color:var(--lg);font-weight:600}
+
+.page{padding:18px 22px 60px}
+.tl{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:start}
+.col-hdr{border-bottom:2.5px solid var(--hc);margin-bottom:10px;padding-bottom:8px}
+.col-hdr .hl{font-size:14px;font-weight:700;color:var(--hc)}
+.col-hdr .hs{font-size:11px;color:#999;margin-top:1px}
+.col-hdr .hct{font-size:11px;color:#bbb}
+
+.card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--bc);border-radius:7px;padding:10px 11px;margin-bottom:7px;cursor:pointer;transition:box-shadow .12s,background .1s}
+.card:hover{box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card.open{background:#fafaf8;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.card-hdr{display:flex;justify-content:space-between;gap:6px}
+.card-title{font-size:12px;font-weight:700;color:#1a1a1a;line-height:1.35;flex:1}
+.edit-btn{font-size:10px;padding:1px 7px;border-radius:8px;border:1px solid var(--border);background:transparent;color:#999;cursor:pointer;flex-shrink:0;font-family:inherit;transition:all .1s}
+.edit-btn:hover{border-color:var(--ot);color:var(--ot)}
+.card-sub{font-size:11px;color:#999;margin:3px 0 6px;line-height:1.3}
+.card-badges{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
+.badge{font-size:10px;padding:2px 7px;border-radius:8px;font-weight:700;white-space:nowrap}
+.cmt-count{font-size:10px;color:#aaa;margin-left:2px}
+.edited-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ot);margin-right:4px;vertical-align:middle}
+
+.expanded{margin-top:10px;padding-top:10px;border-top:1px solid #eee}
+.exp-label{font-size:10px;font-weight:700;color:var(--gg);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.exp-val{font-size:11px;color:var(--b02);line-height:1.55;margin-bottom:10px}
+
+.status-strip{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.status-strip .sl{font-size:10px;font-weight:600;color:#999;margin-right:3px}
+.status-btn{font-size:10px;padding:2px 8px;border-radius:8px;cursor:pointer;font-weight:600;border:1.5px solid transparent;transition:all .1s;font-family:inherit;background:transparent}
+
+.edit-form{display:flex;flex-direction:column;gap:8px}
+.edit-form label{font-size:10px;font-weight:600;color:var(--gg);display:block;margin-bottom:3px}
+.edit-form input,.edit-form textarea,.edit-form select{width:100%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.edit-actions{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.btn{font-size:12px;padding:5px 13px;border-radius:7px;border:1px solid var(--border);background:#fff;cursor:pointer;font-family:inherit;transition:all .1s}
+.btn:hover{background:#f4f4f0}
+.btn.save{background:var(--lg);color:#fff;border-color:var(--lg)}
+.btn.save:hover{background:#0e3636}
+.btn.del{color:var(--pr);border-color:#f5c5c3}
+.btn.del:hover{background:#fdf0ef}
+
+.comments-wrap{border-top:1px solid #eee;padding-top:8px;margin-top:4px}
+.comments-lbl{font-size:10px;font-weight:700;color:var(--gg);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.comment-item{background:#f9f9f7;border:1px solid var(--border);border-radius:7px;padding:7px 9px;margin-bottom:6px}
+.comment-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:6px}
+.comment-author{font-size:11px;font-weight:700;color:var(--lg)}
+.comment-time{font-size:10px;color:#bbb;white-space:nowrap}
+.comment-text{font-size:11px;color:var(--b02);line-height:1.5}
+.comment-form{display:flex;gap:6px;margin-top:6px}
+.comment-form textarea{flex:1;font-size:11px;height:36px;padding:6px 8px;line-height:1.4;transition:border .15s,height .15s}
+.comment-form textarea:focus{height:60px}
+.comment-form button{font-size:11px;padding:5px 12px;border-radius:7px;background:var(--lg);color:#fff;border:none;cursor:pointer;font-family:inherit;align-self:flex-end;transition:background .1s}
+.comment-form button:hover{background:#0e3636}
+.local-note{font-size:11px;color:#aaa;font-style:italic;padding:4px 0}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:flex-start;justify-content:center;padding:40px 16px}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:12px;border:1px solid var(--border);padding:20px 22px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+.modal h3{font-size:15px;font-weight:600;color:var(--lg);margin-bottom:14px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--lg);color:#fff;font-size:12px;font-weight:500;padding:8px 18px;border-radius:20px;z-index:200;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.empty-col{font-size:11px;color:#bbb;font-style:italic;padding:4px 0}
+
+@media(max-width:900px){.tl{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.tl{grid-template-columns:1fr}.page{padding:12px}}
+</style>
+</head>
+<body>
+
+<div class="name-screen" id="nameScreen">
+  <div class="name-card">
+    <div class="logo">Ninety One &mdash; Internal Audit</div>
+    <h2>Who are you?</h2>
+    <p>Your name appears on comments and edits so the team knows who said what.</p>
+    <input type="text" id="nameInput" placeholder="Your name" maxlength="40" />
+    <button class="btn-primary" onclick="setName()">Continue</button>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">Internal Audit &mdash; AI Opportunity Timeline</div>
+      <div class="topbar-sub">Ninety One &nbsp;|&nbsp; April 2026 &nbsp;|&nbsp; Click any card to expand &nbsp;&middot;&nbsp; Edit fields &nbsp;&middot;&nbsp; Post comments</div>
+    </div>
+    <div class="topbar-right">
+      <div id="statPills" style="display:flex;gap:8px"></div>
+      <div class="sync-badge" id="syncBadge">
+        <div class="sync-dot local" id="syncDot"></div>
+        <span id="syncLabel">Loading...</span>
+      </div>
+      <button class="btn-add" onclick="openAdd()">+ Add item</button>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-row">
+      <span class="filter-label">Proposition</span>
+      <div id="propFilters"></div>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Domain</span>
+      <div id="catFilters"></div>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="tl" id="timeline"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h3>Add new item</h3>
+    <div class="edit-form">
+      <div><label>Title *</label><input id="ni-title" placeholder="Short, clear name"/></div>
+      <div><label>Sub-heading</label><input id="ni-sub" placeholder="One-line description"/></div>
+      <div><label>What it does</label><textarea id="ni-what" rows="2"></textarea></div>
+      <div><label>What it enables</label><textarea id="ni-enables" rows="2"></textarea></div>
+      <div><label>What it needs</label><input id="ni-needs"/></div>
+      <div class="grid2">
+        <div><label>Horizon</label>
+          <select id="ni-h">
+            <option value="now">Now (0-12 months)</option>
+            <option value="near">Near (1-2 years)</option>
+            <option value="ambitious">Ambitious (2-3 years)</option>
+            <option value="transformative">Transformative (3+ years)</option>
+          </select>
+        </div>
+        <div><label>Proposition</label>
+          <select id="ni-prop">
+            <option>Intelligence</option><option>Quality</option><option>Efficiency</option>
+            <option>Early warning</option><option>Always-on</option><option>AI franchise</option><option>ARC adviser</option>
+          </select>
+        </div>
+        <div><label>Domain</label>
+          <select id="ni-cat">
+            <option>Document intelligence</option><option>Audit quality</option>
+            <option>Continuous monitoring</option><option>Risk intelligence</option>
+            <option>AI governance franchise</option><option>ARC and strategic intelligence</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="edit-actions" style="margin-top:14px">
+      <button class="btn save" onclick="addItem()">Add item</button>
+      <button class="btn" onclick="closeAdd()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────
+const SP_SITE        = "https://ninetyonecontent.sharepoint.com/teams/InternalAuditImprovementOpportunities";
+const LIST_ITEMS     = "IA Timeline Items";
+const LIST_COMMENTS  = "IA Timeline Comments";
+const POLL_MS        = 20000;
+
+// ── BASE DATA ─────────────────────────────────────────────────────────────
+const BASE = [
+  {id:"i01",h:"now",cat:"Document intelligence",title:"Historical report extraction",sub:"Issues database from 5+ years of PDFs",what:"AI reads every prior audit report PDF and extracts structured data: issue title, condition, rating, management action, owner, due date, recurrence.",enables:"Institutional memory in structured form. Foundation for nearly every other AI capability.",needs:"AI policy approval; PDF access",prop:"Intelligence"},
+  {id:"i02",h:"now",cat:"Document intelligence",title:"Issue narrative drafting",sub:"5-element draft from query text",what:"AI drafts all five issue elements from the query narrative, working paper summary, and control description. Auditor edits, not writes from scratch.",enables:"Consistent issue quality. Faster fieldwork-to-draft-report transition.",needs:"AI policy approval",prop:"Quality"},
+  {id:"i03",h:"now",cat:"Document intelligence",title:"Executive summary auto-draft",sub:"From issues list and overall opinion",what:"AI drafts Introduction, Scope, and Conclusion from the structured issues list, overall opinion, TOR scope, and audit programme.",enables:"Reporting phase compressed. Consistent structure across all reports.",needs:"AI policy approval",prop:"Efficiency"},
+  {id:"i04",h:"now",cat:"Document intelligence",title:"TOR pre-population",sub:"Prior cycle TOR plus updated risk inputs",what:"For recurring audits, AI reads the prior TOR and RACM and produces a first draft, flagging material scope changes.",enables:"Planning phase compressed by days for recurring audits.",needs:"AI policy approval; prior TOR data",prop:"Efficiency"},
+  {id:"i05",h:"now",cat:"Document intelligence",title:"Working paper summarisation",sub:"Auto-summary linked to RACM control",what:"AI reads each working paper and produces: what was tested, sample size, exceptions, conclusion. Reviewer reads summary first.",enables:"Estimated 50-70% reduction in reviewer time per working paper.",needs:"AI policy approval; SharePoint API access",prop:"Efficiency"},
+  {id:"i06",h:"now",cat:"Audit quality",title:"Issue completeness checker",sub:"AI reviews every draft issue before fieldwork closes",what:"AI scores each issue: all 5 elements present? Condition specific and evidenced? Consequence proportionate? Action SMART?",enables:"Consistent quality regardless of who drafted. HIA review time reduced.",needs:"AI policy approval; structured issue data",prop:"Quality"},
+  {id:"i07",h:"now",cat:"Audit quality",title:"Management action quality scorer",sub:"Is the action specific enough to close the issue?",what:"AI assesses management responses for specificity, root cause alignment, and realistic implementation timeline.",enables:"Fewer inadequate actions accepted. Follow-up success rate improves.",needs:"AI policy approval",prop:"Quality"},
+  {id:"i08",h:"now",cat:"Audit quality",title:"Repeat issue detection",sub:"Flags when a new issue has appeared before",what:"When a new issue is raised, AI searches the archive and surfaces previous issues with substantially the same root cause.",enables:"IA moves from reporting individual failures to identifying systemic patterns.",needs:"Issues database; AI policy",prop:"Intelligence"},
+  {id:"i09",h:"now",cat:"Audit quality",title:"AI-assisted risk scoring",sub:"AI challenges each inherent risk factor",what:"The 10-factor scoring is structured in the tool. AI challenges each score with reference to recent events and business changes.",enables:"Consistent and defensible scoring. Quarter-on-quarter changes are explainable.",needs:"AI policy approval; structured scoring data",prop:"Quality"},
+  {id:"i10",h:"now",cat:"Risk intelligence",title:"Regulatory change radar",sub:"FCA, PRA, FRC guidance mapped to audit universe",what:"AI monitors regulatory publications and maps new requirements and enforcement actions to auditable units. Weekly brief produced automatically.",enables:"IA stays ahead of regulatory change without manual scanning.",needs:"External regulatory feed; AI policy",prop:"Early warning"},
+  {id:"i11",h:"now",cat:"Risk intelligence",title:"Peer firm incident monitoring",sub:"Public regulatory actions mapped to N1 risks",what:"AI monitors public enforcement notices at peer asset managers and assesses whether an equivalent risk exists at Ninety One.",enables:"IA surfaces risks proactively that the business has not yet recognised.",needs:"External feed; AI policy",prop:"Early warning"},
+  {id:"i12",h:"near",cat:"Document intelligence",title:"Natural language audit search",sub:"Ask questions across all prior audit work",what:"Semantic search across the full archive. 'Show me every issue raised about data quality in the last 5 years.'",enables:"IA stops relying on individual memory. New team members onboard faster.",needs:"Issues database; vector search; AI policy",prop:"Intelligence"},
+  {id:"i13",h:"near",cat:"Document intelligence",title:"Cross-audit thematic synthesis",sub:"AI identifies themes across multiple audits",what:"AI periodically analyses the full archive and produces a thematic brief on root cause patterns.",enables:"ARC briefing material that currently takes weeks, generated automatically.",needs:"Issues database; vector search; AI policy",prop:"Intelligence"},
+  {id:"i14",h:"near",cat:"Audit quality",title:"Control design adequacy challenger",sub:"AI challenges whether the control mitigates the WCGW",what:"Given the stated risk and WCGW, AI challenges whether the control is logically sufficient to prevent or detect the failure mode.",enables:"Stronger control assessments. Junior auditors benefit most.",needs:"AI policy approval; structured RACM data",prop:"Quality"},
+  {id:"i15",h:"near",cat:"Audit quality",title:"Programme completeness check",sub:"Gaps flagged against standard scope items pre-fieldwork",what:"AI compares programme steps against the 38-item standard scope checklist, TOR risks, and RACM controls.",enables:"Scope omissions reduced. Consistent coverage across auditors.",needs:"AI policy approval; structured programme data",prop:"Quality"},
+  {id:"i16",h:"near",cat:"Audit quality",title:"IQAR intelligence",sub:"AI assists the annual quality programme",what:"AI analyses IQAR findings across multiple quarters, identifies patterns, benchmarks against IIA standards.",enables:"Quality programme becomes evidence-based, not checklist-based.",needs:"Structured IQAR data; AI policy",prop:"Quality"},
+  {id:"i17",h:"near",cat:"Continuous monitoring",title:"Automated SOD testing",sub:"Segregation of duties checked continuously",what:"AI monitors user access data against a defined segregation matrix. Any breach or near-miss surfaced to IA immediately.",enables:"Always-on access control coverage. Findings surface in weeks not months.",needs:"IT system access; data pipeline from AD",prop:"Always-on"},
+  {id:"i18",h:"near",cat:"Continuous monitoring",title:"Databricks pipeline monitoring",sub:"IA watches the data platform from the inside",what:"IA embeds monitoring logic into Databricks governance before March 2027 go-live. Data quality failures, lineage breaks, and access anomalies surface automatically.",enables:"IA is first to know when the platform behaves unexpectedly. Architecture leverage point.",needs:"Databricks forum mandate formalised; Azure AI policy; data access",prop:"Always-on"},
+  {id:"i19",h:"near",cat:"Risk intelligence",title:"Internal signal aggregation",sub:"Board papers and management reports scanned for risk signals",what:"AI reads internally published documents and extracts risk signals relevant to the audit universe.",enables:"IA's risk assessment becomes genuinely dynamic rather than point-in-time.",needs:"AI policy; access to internal document repositories",prop:"Early warning"},
+  {id:"i20",h:"near",cat:"Risk intelligence",title:"Audit universe monitor",sub:"AI flags gaps as the business changes",what:"AI monitors new products, system changes, regulatory permissions, and M&A to assess whether the audit universe needs updating.",enables:"Audit universe stays complete continuously.",needs:"IT change management data; AI policy",prop:"Early warning"},
+  {id:"i21",h:"near",cat:"AI governance franchise",title:"Pre-deployment AI assessment",sub:"IA reviews new AI tools before they go live",what:"Structured IA assessment triggered at procurement or IT approval stage. Assesses model risk, data governance, bias risk, and operational controls.",enables:"IA moves from reviewing AI after the fact to shaping risk management before deployment.",needs:"IA mandate in procurement governance; AI assessment framework",prop:"AI franchise"},
+  {id:"i22",h:"near",cat:"AI governance franchise",title:"AI model inventory",sub:"Register of all AI tools in use across the firm",what:"AI reads IT asset data and procurement records to maintain a continuously updated register of every AI tool deployed.",enables:"IA owns the only complete picture of AI deployment in the firm.",needs:"IT system access; data policy; IA mandate from ExCo",prop:"AI franchise"},
+  {id:"i23",h:"near",cat:"AI governance franchise",title:"Databricks AI governance embedding",sub:"IA co-designs AI controls at architecture stage",what:"IA participates in Databricks build as active governance partner assessing architecture decisions against control requirements.",enables:"IA's monitoring infrastructure built into the platform before decisions are locked.",needs:"Databricks forum mandate formalised; data engineering partnership",prop:"AI franchise"},
+  {id:"i24",h:"near",cat:"AI governance franchise",title:"Shadow AI detection",sub:"Detecting unapproved AI tool usage",what:"AI monitors signals of unapproved tool usage: device logs, network patterns, expense claims. Surfaces to IA and IT.",enables:"IA enforces AI governance rather than just auditing it retrospectively.",needs:"IT partnership; data access; AI policy",prop:"AI franchise"},
+  {id:"i25",h:"near",cat:"AI governance franchise",title:"AI incident register",sub:"Structured capture and analysis of AI failures",what:"IA maintains and analyses the firm's AI incident register. AI assists in root cause classification and pattern identification.",enables:"IA becomes the institutional memory of AI risk across the firm.",needs:"Incident reporting process; IA mandate; AI policy",prop:"AI franchise"},
+  {id:"i26",h:"near",cat:"ARC and strategic intelligence",title:"Auto-generated ARC pack",sub:"Quarterly pack drawn live from the tool",what:"AI assembles the quarterly ARC report from live data: plan progress, issues raised, overdue actions, emerging risks, thematic observations.",enables:"HIA preparation time: 2 days to 2 hours.",needs:"Full tool build; issues database live; AI policy",prop:"ARC adviser"},
+  {id:"i27",h:"near",cat:"ARC and strategic intelligence",title:"Natural language ARC Q&A",sub:"Coverage and risk questions answered instantly",what:"Questions like 'What percentage of Very High risk units audited in the last 18 months?' answered live from the tool.",enables:"IA answers ARC questions live in committee. Changes the dynamic entirely.",needs:"Full structured data model live; AI assistant layer",prop:"ARC adviser"},
+  {id:"i28",h:"near",cat:"ARC and strategic intelligence",title:"Multi-year control trend analysis",sub:"Where are controls improving vs deteriorating?",what:"AI analyses issues database over 5+ years by unit, root cause, repeat rate, and management action quality.",enables:"ARC receives genuine intelligence, not a list of findings.",needs:"Historical issues database; AI policy",prop:"ARC adviser"},
+  {id:"i29",h:"near",cat:"ARC and strategic intelligence",title:"Regulatory benchmarking",sub:"Audit plan vs current supervisory priorities",what:"AI compares audit plan and findings against FCA priorities, ESMA work programmes, and IIA thematic guidance.",enables:"Plan is defensible by external benchmarking, not just internal risk assessment.",needs:"Regulatory feed; audit plan data; AI policy",prop:"ARC adviser"},
+  {id:"i30",h:"ambitious",cat:"Document intelligence",title:"Audit scheduling intelligence",sub:"AI suggests optimal plan sequencing",what:"AI considers unit complexity, team capacity, business cycles, regulatory windows, and prior findings.",enables:"Plan that is genuinely resource-optimised rather than sequenced by convenience.",needs:"Tool data; capacity model; AI policy",prop:"Efficiency"},
+  {id:"i31",h:"ambitious",cat:"Continuous monitoring",title:"KRI dashboard from live systems",sub:"KRIs populated automatically, not by management",what:"AI extracts KRIs directly from source systems: failed logins, exception approvals, reconciliation breaks, complaint volumes.",enables:"KRI data is objective and not curated by the function being monitored.",needs:"System data access; AI policy; data engineering partnership",prop:"Always-on"},
+  {id:"i32",h:"ambitious",cat:"Continuous monitoring",title:"Investment mandate monitoring",sub:"Pre-breach signals before compliance flags them",what:"AI monitors portfolio data against mandate parameters: position sizing approaching limits, concentration building, override patterns.",enables:"Investment process audit transforms from retrospective to anticipatory.",needs:"ThinkFolio and CRIMS data access; AI policy",prop:"Always-on"},
+  {id:"i33",h:"ambitious",cat:"Continuous monitoring",title:"Reconciliation failure monitoring",sub:"Automated flagging of unexplained breaks",what:"AI monitors reconciliation outputs from NAV, cash, and trade matching. Surfaces unexplained or aged breaks to IA.",enables:"Operational risk issues surface to IA before they appear in management reporting.",needs:"Data access to reconciliation systems; AI policy",prop:"Always-on"},
+  {id:"i34",h:"ambitious",cat:"Continuous monitoring",title:"Vendor and counterparty watch",sub:"External risk signals mapped to audit universe",what:"AI monitors public data for adverse information about key third parties: credit events, regulatory actions, management changes, cyber incidents.",enables:"Third-party risk audit is no longer episodic.",needs:"External data feeds; AI policy",prop:"Early warning"},
+  {id:"i35",h:"ambitious",cat:"AI governance franchise",title:"Third-party AI risk assessment",sub:"What AI are vendors using, and on whose data?",what:"AI scans vendor contracts and published AI policies to assess whether key third parties process Ninety One data through AI.",enables:"Closes a governance gap most asset managers have not addressed.",needs:"Procurement data access; AI policy",prop:"AI franchise"},
+  {id:"i36",h:"ambitious",cat:"AI governance franchise",title:"AI model output monitoring",sub:"Drift, bias, and unexplained decisions flagged to IA",what:"For each model in the inventory, IA sets parameters: output distribution drift, demographic parity, confidence degradation. Alerts on breach.",enables:"Genuine third-line assurance over AI outputs, not just governance frameworks.",needs:"Model access agreements; data science partnership; AI policy",prop:"AI franchise"},
+  {id:"i37",h:"ambitious",cat:"ARC and strategic intelligence",title:"Strategic risk briefing",sub:"Synthesised forward-looking view for ARC",what:"AI synthesises internal monitoring, external intelligence, peer incidents, and control trends into 3-5 areas of highest emerging risk.",enables:"IA repositions from reporting findings to forward-looking intelligence.",needs:"All monitoring and intelligence feeds live; AI policy",prop:"ARC adviser"},
+  {id:"i38",h:"ambitious",cat:"ARC and strategic intelligence",title:"Predictive recurrence scoring",sub:"Which open actions are unlikely to close on time?",what:"AI scores each open management action: specificity, owner track record, change complexity, time remaining.",enables:"IA proactively engages with management rather than reporting overdue items to ARC.",needs:"Issues database; follow-up data; AI policy",prop:"ARC adviser"},
+  {id:"i39",h:"transformative",cat:"Continuous monitoring",title:"Trade surveillance pattern recognition",sub:"Unusual order flow and timing patterns flagged",what:"AI applies behavioural pattern recognition to trading data: unusual order sizing, MNPI timing correlations, systematic override patterns.",enables:"Market conduct audit moves from sample testing to behavioural monitoring.",needs:"Trading system data access; specialist model capability; AI policy",prop:"Always-on"},
+  {id:"i40",h:"transformative",cat:"Risk intelligence",title:"Predictive audit scheduling",sub:"AI ranks audit universe by current risk in real time",what:"Drawing on all monitoring signals, risk scoring, time since last audit, and external intelligence, AI ranks the audit universe dynamically.",enables:"Annual plan becomes a living risk-responsive schedule, not a point-in-time document.",needs:"All monitoring signals live; structured audit plan data; AI policy",prop:"Early warning"},
+];
+
+const PS={
+  "Intelligence":{bg:"#E8F5F0",tx:"#085041",br:"#1D9E75"},
+  "Quality":     {bg:"#EEEDFE",tx:"#26215C",br:"#7F77DD"},
+  "Efficiency":  {bg:"#E4EFFA",tx:"#0C447C",br:"#378ADD"},
+  "Early warning":{bg:"#FEF5E4",tx:"#5D3A0A",br:"#BA7517"},
+  "Always-on":   {bg:"#EBF4E0",tx:"#1E4010",br:"#3B6D11"},
+  "AI franchise":{bg:"#FDEEE8",tx:"#5C1F08",br:"#D85A30"},
+  "ARC adviser": {bg:"#FCE8F0",tx:"#4A1025",br:"#D4537E"},
+};
+const SS={
+  "not started":  {bg:"#f0f0ec",tx:"#888"},
+  "in discussion":{bg:"#FEF5E4",tx:"#5D3A0A"},
+  "in progress":  {bg:"#E4EFFA",tx:"#0C447C"},
+  "blocked":      {bg:"#FDEEE8",tx:"#5C1F08"},
+  "done":         {bg:"#EBF4E0",tx:"#1E4010"},
+};
+const HC={now:"#378ADD",near:"#1D9E75",ambitious:"#BA7517",transformative:"#7F77DD"};
+const HL={now:"Now",near:"Near",ambitious:"Ambitious",transformative:"Transformative"};
+const HS={now:"0-12 months",near:"1-2 years",ambitious:"2-3 years",transformative:"3+ years"};
+const HORIZONS=["now","near","ambitious","transformative"];
+const SOPT=["not started","in discussion","in progress","blocked","done"];
+const CATS=["All","Document intelligence","Audit quality","Continuous monitoring","Risk intelligence","AI governance franchise","ARC and strategic intelligence"];
+const PROPS=["All","Intelligence","Quality","Efficiency","Early warning","Always-on","AI franchise","ARC adviser"];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let items    = JSON.parse(localStorage.getItem("ia_tl_items")||"null") || JSON.parse(JSON.stringify(BASE));
+let comments = JSON.parse(localStorage.getItem("ia_tl_comments")||"[]");
+let userName = localStorage.getItem("ia_tl_name")||"";
+let spOk     = false;
+let activeCat  = "All";
+let activeProp = "All";
+let expanded   = {};
+let editing    = null;
+
+// ── SHAREPOINT ────────────────────────────────────────────────────────────
+async function spGet(path){
+  const r = await fetch(`${SP_SITE}/_api/${path}`,{
+    credentials:"include",
+    headers:{"Accept":"application/json;odata=nometadata"}
+  });
+  if(!r.ok) throw new Error(r.status);
+  return r.json();
+}
+async function spPost(path,body,digest,extra={}){
+  const r = await fetch(`${SP_SITE}/_api/${path}`,{
+    method:"POST", credentials:"include",
+    headers:{"Accept":"application/json;odata=nometadata","Content-Type":"application/json;odata=nometadata","X-RequestDigest":digest,...(extra.headers||{})},
+    body:JSON.stringify(body)
+  });
+  if(!r.ok) throw new Error(r.status);
+  return r.status===204?null:r.json();
+}
+async function digest(){
+  const d = await spPost("contextinfo",{},""  ,{headers:{"X-RequestDigest":""}});
+  // fallback: use contextinfo without digest for the first call
+  const r = await fetch(`${SP_SITE}/_api/contextinfo`,{method:"POST",credentials:"include",headers:{"Accept":"application/json;odata=nometadata","Content-Length":"0"}});
+  const j = await r.json();
+  return j.FormDigestValue;
+}
+function listUrl(name){ return `web/lists/getbytitle('${encodeURIComponent(name)}')`; }
+
+async function checkSP(){
+  try {
+    await Promise.all([
+      spGet(`${listUrl(LIST_ITEMS)}?$select=Id`),
+      spGet(`${listUrl(LIST_COMMENTS)}?$select=Id`)
+    ]);
+    spOk = true;
+    setSyncUI("live","Live sync");
+  } catch(e){
+    spOk = false;
+    setSyncUI("local","Local only");
+  }
+}
+
+async function pullSP(){
+  if(!spOk) return;
+  setSyncUI("syncing","Syncing...");
+  try {
+    // Pull item overrides
+    const ir = await spGet(`${listUrl(LIST_ITEMS)}/items?$select=ItemId,Status,EditedFields&$top=500`);
+    (ir.value||[]).forEach(r=>{
+      const idx = items.findIndex(i=>i.id===r.ItemId);
+      if(idx<0) return;
+      if(r.Status) items[idx].status = r.Status;
+      if(r.EditedFields){
+        try{ const ef=JSON.parse(r.EditedFields); items[idx]={...items[idx],...ef,_edited:true}; }catch(e){}
+      }
+    });
+    // Pull comments
+    const cr = await spGet(`${listUrl(LIST_COMMENTS)}/items?$select=ItemId,Author,CommentText,PostedAt&$orderby=PostedAt asc&$top=1000`);
+    comments = (cr.value||[]).map(r=>({itemId:r.ItemId,author:r.Author,text:r.CommentText,ts:r.PostedAt}));
+    localStorage.setItem("ia_tl_comments",JSON.stringify(comments));
+    setSyncUI("live","Live sync");
+    render();
+  } catch(e){ setSyncUI("error","Sync error"); }
+}
+
+async function pushStatus(id,status){
+  if(!spOk) return;
+  setSyncUI("syncing","Syncing...");
+  try {
+    const dg = await digest();
+    const ex = await spGet(`${listUrl(LIST_ITEMS)}/items?$filter=ItemId eq '${id}'&$select=Id&$top=1`);
+    const payload = {ItemId:id,Status:status,EditedBy:userName};
+    if(ex.value&&ex.value.length>0){
+      await fetch(`${SP_SITE}/_api/${listUrl(LIST_ITEMS)}/items(${ex.value[0].Id})`,{
+        method:"POST",credentials:"include",
+        headers:{"Accept":"application/json;odata=nometadata","Content-Type":"application/json;odata=nometadata",
+          "X-RequestDigest":dg,"IF-MATCH":"*","X-HTTP-Method":"MERGE"},
+        body:JSON.stringify(payload)
+      });
+    } else {
+      await spPost(`${listUrl(LIST_ITEMS)}/items`,payload,dg);
+    }
+    setSyncUI("live","Live sync");
+  } catch(e){ setSyncUI("error","Sync error"); }
+}
+
+async function pushEdit(id,fields){
+  if(!spOk) return;
+  setSyncUI("syncing","Syncing...");
+  try {
+    const dg = await digest();
+    const ex = await spGet(`${listUrl(LIST_ITEMS)}/items?$filter=ItemId eq '${id}'&$select=Id&$top=1`);
+    const payload = {ItemId:id,EditedBy:userName,EditedFields:JSON.stringify(fields),Status:fields.status||"not started"};
+    if(ex.value&&ex.value.length>0){
+      await fetch(`${SP_SITE}/_api/${listUrl(LIST_ITEMS)}/items(${ex.value[0].Id})`,{
+        method:"POST",credentials:"include",
+        headers:{"Accept":"application/json;odata=nometadata","Content-Type":"application/json;odata=nometadata",
+          "X-RequestDigest":dg,"IF-MATCH":"*","X-HTTP-Method":"MERGE"},
+        body:JSON.stringify(payload)
+      });
+    } else {
+      await spPost(`${listUrl(LIST_ITEMS)}/items`,payload,dg);
+    }
+    setSyncUI("live","Live sync");
+  } catch(e){ setSyncUI("error","Sync error"); }
+}
+
+async function pushComment(itemId,text){
+  if(!spOk) return false;
+  setSyncUI("syncing","Syncing...");
+  try {
+    const dg = await digest();
+    await spPost(`${listUrl(LIST_COMMENTS)}/items`,
+      {ItemId:itemId,Author:userName,CommentText:text,PostedAt:new Date().toISOString()},dg);
+    setSyncUI("live","Live sync");
+    return true;
+  } catch(e){ setSyncUI("error","Sync error"); return false; }
+}
+
+function setSyncUI(state,label){
+  const dot=document.getElementById("syncDot");
+  const lbl=document.getElementById("syncLabel");
+  if(!dot) return;
+  dot.className="sync-dot "+state;
+  lbl.textContent=label;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+window.onload = ()=>{
+  if(userName){ launch(); }
+  else { document.getElementById("nameInput").addEventListener("keydown",e=>{if(e.key==="Enter")setName();}); }
+};
+
+function setName(){
+  const n=document.getElementById("nameInput").value.trim();
+  if(!n) return;
+  userName=n;
+  localStorage.setItem("ia_tl_name",n);
+  launch();
+}
+
+async function launch(){
+  document.getElementById("nameScreen").style.display="none";
+  document.getElementById("app").style.display="block";
+  renderFilters();
+  render();
+  // Try SP — but don't block the UI
+  setSyncUI("syncing","Connecting...");
+  await checkSP();
+  if(spOk){ await pullSP(); setInterval(pullSP,POLL_MS); }
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function fi(){ return items.filter(i=>(activeCat==="All"||i.cat===activeCat)&&(activeProp==="All"||i.prop===activeProp)); }
+function ic(id){ return comments.filter(c=>c.itemId===id); }
+
+function renderFilters(){
+  document.getElementById("propFilters").innerHTML = PROPS.map(p=>{
+    const s=PS[p], on=activeProp===p;
+    const style=on&&s?`background:${s.bg};color:${s.tx};border-color:${s.br};border-width:1.5px;font-weight:700`:"";
+    return `<button class="pill${on?" on":""}" style="${style}" onclick="setProp('${p}')">${p==="All"?"All propositions":p}</button>`;
+  }).join("");
+  document.getElementById("catFilters").innerHTML = CATS.map(c=>
+    `<button class="pill${activeCat===c?" on":""}" onclick="setCat('${c.replace(/'/g,"\\'")}'">${c==="All"?"All domains":c}</button>`
+  ).join("");
+}
+
+function render(){
+  const f=fi();
+  const prog=items.filter(i=>(i.status||"not started")!=="not started").length;
+  document.getElementById("statPills").innerHTML=[
+    {n:items.length,l:"items"},{n:prog,l:"in progress"},{n:comments.length,l:"comments"}
+  ].map(s=>`<div class="stat-pill"><div class="n">${s.n}</div><div class="l">${s.l}</div></div>`).join("");
+
+  document.getElementById("timeline").innerHTML=HORIZONS.map(hz=>{
+    const col=f.filter(i=>i.h===hz), hc=HC[hz];
+    return `<div>
+      <div class="col-hdr" style="--hc:${hc}">
+        <div class="hl">${HL[hz]}</div><div class="hs">${HS[hz]}</div>
+        <div class="hct">${col.length} item${col.length!==1?"s":""}</div>
+      </div>
+      ${col.length===0?'<div class="empty-col">No items match</div>':col.map(i=>card(i)).join("")}
+    </div>`;
+  }).join("");
+}
+
+function card(item){
+  const ps=PS[item.prop]||PS["Intelligence"];
+  const status=item.status||"not started";
+  const ss=SS[status]||SS["not started"];
+  const isOpen=expanded[item.id], isEdit=editing===item.id;
+  const cmts=ic(item.id);
+  let body="";
+  if(isOpen){
+    if(isEdit){
+      body=`<div class="expanded" onclick="event.stopPropagation()">
+        <div class="edit-form">
+          <div><label>Title</label><input id="ef-title" value="${e(item.title)}"/></div>
+          <div><label>Sub-heading</label><input id="ef-sub" value="${e(item.sub)}"/></div>
+          <div><label>What it does</label><textarea id="ef-what" rows="3">${e(item.what)}</textarea></div>
+          <div><label>What it enables</label><textarea id="ef-enables" rows="3">${e(item.enables)}</textarea></div>
+          <div><label>What it needs</label><input id="ef-needs" value="${e(item.needs)}"/></div>
+          <div class="grid2">
+            <div><label>Horizon</label><select id="ef-h">${HORIZONS.map(h=>`<option value="${h}"${item.h===h?" selected":""}>${HL[h]}</option>`).join("")}</select></div>
+            <div><label>Proposition</label><select id="ef-prop">${Object.keys(PS).map(p=>`<option${item.prop===p?" selected":""}>${p}</option>`).join("")}</select></div>
+            <div><label>Domain</label><select id="ef-cat">${CATS.filter(c=>c!=="All").map(c=>`<option${item.cat===c?" selected":""}>${c}</option>`).join("")}</select></div>
+            <div><label>Status</label><select id="ef-status">${SOPT.map(s=>`<option${status===s?" selected":""}>${s}</option>`).join("")}</select></div>
+          </div>
+        </div>
+        <div class="edit-actions">
+          <button class="btn save" onclick="saveEdit('${item.id}')">Save</button>
+          <button class="btn" onclick="cancelEdit()">Cancel</button>
+          <button class="btn del" onclick="deleteItem('${item.id}')">Remove</button>
+        </div>
+      </div>`;
+    } else {
+      const strip=`<div class="status-strip"><span class="sl">Status:</span>${SOPT.map(s=>{
+        const sc=SS[s],on=status===s;
+        return `<button class="status-btn" style="background:${on?sc.bg:"transparent"};color:${on?sc.tx:"#ccc"};border-color:${on?sc.tx:"#e0e0da"}" onclick="event.stopPropagation();setStatus('${item.id}','${s}')">${s}</button>`;
+      }).join("")}</div>`;
+      const cmtHtml=cmts.map(c=>`<div class="comment-item">
+        <div class="comment-meta"><span class="comment-author">${e(c.author)}</span><span class="comment-time">${tl(c.ts)}</span></div>
+        <div class="comment-text">${e(c.text)}</div>
+      </div>`).join("");
+      body=`<div class="expanded" onclick="event.stopPropagation()">
+        <div class="exp-label">What it does</div><div class="exp-val">${e(item.what)}</div>
+        <div class="exp-label">What it enables</div><div class="exp-val">${e(item.enables)}</div>
+        <div class="exp-label">What it needs</div><div class="exp-val">${e(item.needs)}</div>
+        ${strip}
+        <div class="comments-wrap">
+          <div class="comments-lbl">Comments${cmts.length>0?" ("+cmts.length+")":""}</div>
+          ${!spOk?'<div class="local-note">Create the SharePoint lists to enable shared comments visible to the whole team.</div>':""}
+          ${cmtHtml}
+          <div class="comment-form">
+            <textarea id="cf-${item.id}" placeholder="Add a comment as ${e(userName)}..." onkeydown="ck(event,'${item.id}')"></textarea>
+            <button onclick="postCmt('${item.id}')">Post</button>
+          </div>
+        </div>
+      </div>`;
+    }
+  }
+  return `<div class="card${isOpen?" open":""}" style="--bc:${ps.br}" onclick="tog('${item.id}')">
+    <div class="card-hdr">
+      <div class="card-title">${item._edited?'<span class="edited-dot"></span>':""}${e(item.title)}</div>
+      <button class="edit-btn" onclick="event.stopPropagation();startEdit('${item.id}')">Edit</button>
+    </div>
+    <div class="card-sub">${e(item.sub)}</div>
+    <div class="card-badges">
+      <span class="badge" style="background:${ps.bg};color:${ps.tx}">${item.prop}</span>
+      <span class="badge" style="background:${ss.bg};color:${ss.tx}">${status}</span>
+      ${cmts.length>0?`<span class="cmt-count">${cmts.length} comment${cmts.length!==1?"s":""}</span>`:""}
+    </div>
+    ${body}
+  </div>`;
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────
+function tog(id){ if(editing===id)return; expanded[id]=!expanded[id]; if(!expanded[id])editing=null; render(); }
+function startEdit(id){ editing=id; expanded[id]=true; render(); }
+function cancelEdit(){ editing=null; render(); }
+function setProp(p){ activeProp=p; renderFilters(); render(); }
+function setCat(c){ activeCat=c; renderFilters(); render(); }
+
+async function setStatus(id,status){
+  const idx=items.findIndex(i=>i.id===id); if(idx<0)return;
+  items[idx].status=status;
+  save(); render(); toast("Status updated");
+  await pushStatus(id,status);
+}
+
+async function saveEdit(id){
+  const idx=items.findIndex(i=>i.id===id); if(idx<0)return;
+  const fields={title:g("ef-title")||items[idx].title,sub:g("ef-sub"),what:g("ef-what"),enables:g("ef-enables"),needs:g("ef-needs"),h:g("ef-h"),prop:g("ef-prop"),cat:g("ef-cat"),status:g("ef-status")};
+  items[idx]={...items[idx],...fields,_edited:true};
+  editing=null; save(); render(); toast("Changes saved");
+  await pushEdit(id,fields);
+}
+
+function deleteItem(id){
+  if(!confirm("Remove this item?")) return;
+  items=items.filter(i=>i.id!==id);
+  delete expanded[id]; editing=null;
+  save(); render(); toast("Item removed");
+}
+
+async function postCmt(itemId){
+  const el=document.getElementById("cf-"+itemId);
+  const text=el?.value.trim(); if(!text)return;
+  const cmt={itemId,author:userName,text,ts:new Date().toISOString()};
+  comments.push(cmt);
+  el.value="";
+  localStorage.setItem("ia_tl_comments",JSON.stringify(comments));
+  render(); toast("Comment posted");
+  await pushComment(itemId,text);
+}
+
+function ck(ev,id){ if(ev.key==="Enter"&&!ev.shiftKey){ev.preventDefault();postCmt(id);} }
+
+function openAdd(){ document.getElementById("addModal").classList.add("open"); }
+function closeAdd(){ document.getElementById("addModal").classList.remove("open"); }
+
+async function addItem(){
+  const title=document.getElementById("ni-title").value.trim();
+  if(!title){alert("Title is required");return;}
+  const item={id:"i"+Date.now().toString(36),title,sub:g("ni-sub"),what:g("ni-what"),enables:g("ni-enables"),needs:g("ni-needs"),h:g("ni-h"),prop:g("ni-prop"),cat:g("ni-cat"),status:"not started"};
+  items.push(item); closeAdd();
+  ["ni-title","ni-sub","ni-what","ni-enables","ni-needs"].forEach(id=>document.getElementById(id).value="");
+  save(); render(); toast("Item added");
+  await pushEdit(item.id,item);
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────
+function save(){ localStorage.setItem("ia_tl_items",JSON.stringify(items)); }
+function g(id){ return document.getElementById(id)?.value.trim()||""; }
+function e(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function tl(ts){ const d=new Date(ts); return d.toLocaleDateString("en-GB",{day:"numeric",month:"short"})+" "+d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}); }
+let toastT;
+function toast(msg){ const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("show"),2500); }
+document.getElementById("addModal").addEventListener("click",function(e){if(e.target===this)closeAdd();});
+</script>
+</body>
+</html>
